@@ -1,31 +1,32 @@
 #include "cprocessing.h"
+#include "structs.h"
 
 const char* runAniList[6] = {
-	"Assets/character/run/run_1.png" ,
-	"Assets/character/run/run_2.png" ,
-	"Assets/character/run/run_3.png" ,
-	"Assets/character/run/run_4.png" ,
-	"Assets/character/run/run_5.png" ,
-	"Assets/character/run/run_6.png" };
+	"Assets/sprites/mc/run/run_1.png" ,
+	"Assets/sprites/mc/run/run_2.png" ,
+	"Assets/sprites/mc/run/run_3.png" ,
+	"Assets/sprites/mc/run/run_4.png" ,
+	"Assets/sprites/mc/run/run_5.png" ,
+	"Assets/sprites/mc/run/run_6.png" };
 
 const char* runAniLeftList[6] = {
-	"Assets/character/runLeft/run_1.png" ,
-	"Assets/character/runLeft/run_2.png" ,
-	"Assets/character/runLeft/run_3.png" ,
-	"Assets/character/runLeft/run_4.png" ,
-	"Assets/character/runLeft/run_5.png" ,
-	"Assets/character/runLeft/run_6.png" };
+	"Assets/sprites/mc/runLeft/run_1.png" ,
+	"Assets/sprites/mc/runLeft/run_2.png" ,
+	"Assets/sprites/mc/runLeft/run_3.png" ,
+	"Assets/sprites/mc/runLeft/run_4.png" ,
+	"Assets/sprites/mc/runLeft/run_5.png" ,
+	"Assets/sprites/mc/runLeft/run_6.png" };
 
 const char* standAniList[3] = {
-	"Assets/character/ready/ready_1.png",
-	"Assets/character/ready/ready_2.png",
-	"Assets/character/ready/ready_3.png"
+	"Assets/sprites/mc/ready/ready_1.png",
+	"Assets/sprites/mc/ready/ready_2.png",
+	"Assets/sprites/mc/ready/ready_3.png"
 };
 
 const char* standAniLeftList[3] = {
-	"Assets/character/readyLeft/ready_1.png",
-	"Assets/character/readyLeft/ready_2.png",
-	"Assets/character/readyLeft/ready_3.png"
+	"Assets/sprites/mc/readyLeft/ready_1.png",
+	"Assets/sprites/mc/readyLeft/ready_2.png",
+	"Assets/sprites/mc/readyLeft/ready_3.png"
 };
 
 CP_Image animateRun(int interation, int facing, int state) {
@@ -66,4 +67,44 @@ int getFrameInteration(int interation) {
 		}
 	}
 	return interation;
+}
+
+int frameToSprite(int interation, int noSprites) {
+	if (CP_System_GetFrameCount() % 8 == 0) {
+		if (interation < noSprites) {
+			interation++;
+		}
+		else interation = 1;
+	}
+
+	return interation;
+}
+
+SpriteSheet getSpriteSheet(Character* character) {
+	SpriteSheet sheet;
+	switch (character->state) {
+		case 1:
+			character->sprite = CP_Image_Load("Assets/sprites/walk.png");
+			sheet.frames = 13;
+			sheet.stepWidth = CP_Image_GetWidth(character->sprite) / 13;
+			sheet.interval = 4;
+			break;
+		case 2:
+			character->sprite = CP_Image_Load("Assets/sprites/hit.png");
+			sheet.frames = 8;
+			sheet.stepWidth = CP_Image_GetWidth(character->sprite) / 8;
+			sheet.interval = 3;
+			break;
+		default:
+			character->sprite = CP_Image_Load("Assets/sprites/idle.png");
+			sheet.frames = 11;
+			sheet.stepWidth = CP_Image_GetWidth(character->sprite) / 11;
+			sheet.interval = 5;
+			break;
+	}
+	sheet.height = CP_Image_GetHeight(character->sprite);
+	sheet.width = CP_Image_GetWidth(character->sprite);
+	sheet.stepHeight = CP_Image_GetHeight(character->sprite);
+
+	return sheet;
 }

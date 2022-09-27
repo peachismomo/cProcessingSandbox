@@ -55,14 +55,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Extern\CProcessing\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\CProcessing\inc;$(SolutionDir)Inc;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Extern\CProcessing\lib\x64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Extern\CProcessing\inc;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Extern\CProcessing\inc;$(SolutionDir)Inc;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\Extern\CProcessing\lib\x64;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>

@@ -1,5 +1,5 @@
 #include "cprocessing.h"
-#include "../Inc/structs.h"
+#include "structs.h"
 
 /*
 * @brief: calculates the movement of a position relative to the target. Imitates a chasing movement
@@ -9,19 +9,16 @@
 *		  float units - The length of each unit
 * @return: CP_Vector newPosition - The new position of the object after movement calculation.
 */
-CP_Vector enemyMovement(CP_Vector position, CP_Vector target, float speed, float units) {
+CP_Vector enemyMovement(CP_Vector position, CP_Vector target, float speed) {
 
-	//Number of units to move in the time elasped between the alst frame and the current frame.
+	//multiply speed by delta time to ensure speed is the same regardless of framerate
 	float unitSpeed = speed * CP_System_GetDt();
 
 	//Direction vector from position to the target.
 	CP_Vector directionNorm = CP_Vector_Normalize(CP_Vector_Subtract(target, position));
 
-	//Scale the direction by the length of each unit.
-	directionNorm = CP_Vector_Scale(directionNorm, units);
-
 	//Set the new position.
-	CP_Vector newPosition = CP_Vector_Add(position, CP_Vector_Scale(directionNorm, speed));
+	CP_Vector newPosition = CP_Vector_Add(position, CP_Vector_Scale(directionNorm, unitSpeed));
 
 	return newPosition;
 }
@@ -64,25 +61,44 @@ CP_Vector getDirection(Character* character) {
 * @param: CP_Vector position - The position of the character to move
 *		  CP_Vector direction - The vector direction
 *		  float speed - The number of units to move per frame
-*		  float units - The length of each unit
 * @return: CP_Vector newPosition - The new position of the object after movement calculation.
 */
-CP_Vector characterMovement(CP_Vector position, CP_Vector direction, float speed, float units) {
+CP_Vector characterMovement(CP_Vector position, CP_Vector direction, float speed) {
 	float unitSpeed = speed * CP_System_GetDt();
 
 	CP_Vector directionNorm = CP_Vector_Normalize(direction);
 
-	directionNorm = CP_Vector_Scale(directionNorm, units);
-
-	CP_Vector newPosition = CP_Vector_Add(position, CP_Vector_Scale(directionNorm, speed));
+	CP_Vector newPosition = CP_Vector_Add(position, CP_Vector_Scale(directionNorm, unitSpeed));
 
 	return newPosition;
 }
 
 
+/*
+* @brief: Determines if the character is moving or not
+* @param: CP_Vector movDirection - The CP_Vector of the object
+* @return: int - 1 means the object is moving, 0 means the object is not moving 
+*/
 int isMoving(CP_Vector movDirection) {
 	if (movDirection.x != 0 || movDirection.y != 0) {
 		return 1;
 	}
 	else return 0;
+}
+
+/*
+* @brief: Returns a BOOL value an object has collided with another object
+* @param: CP_Vector character - Object 1
+*		  CP_Vector enemy - Object 2
+* @return: BOOL - Returns TRUE if the 2 objects collided and false if they did not collide.
+*/
+BOOL collided(CP_Vector character, CP_Vector enemy, float hitboxRadius) {
+	BOOL collided = FALSE;
+	float distance = CP_Vector_Distance(character, enemy);
+
+	if (distance <= hitboxRadius) {
+		collided = TRUE;
+	}
+
+	return collided;
 }
